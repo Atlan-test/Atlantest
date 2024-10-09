@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-svc
+  namespace: ecommerce
+spec:
+  ports:
+    - port: 5672       # AMQP port for RabbitMQ clients
+      targetPort: 5672 
+    - port: 15672      # Management UI port 
+      targetPort: 15672 
+  selector:
+    app: rabbitmq-app

@@ -1,0 +1,11 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: my-storage-class
+  namesapace: ecommerce
+provisioner: kubernetes.io/aws-ebs  # Specify the provisioner (e.g., AWS EBS, GCE PD, etc.)
+parameters:
+  type: gp2                     # Type of EBS volume (e.g., gp2 for General Purpose SSD)
+  fsType: ext4                  # Filesystem type to be used on the volume
+reclaimPolicy: Delete/Retain    # What happens to the volume when released
+volumeBindingMode: Immediate     # Volume binding mode (Immediate or WaitForFirstConsumer)

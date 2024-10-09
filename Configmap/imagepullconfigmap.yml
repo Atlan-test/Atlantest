@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my_registry_secret
+  namesapace: ecommerce  # Specify the namespace if needed
+data:
+  private.registry.example.com: |
+    {
+      "username": "your-username",    
+      "password": "your-password",                # here we declare the values for keys which we defined 
+      "email": "your-email@example.com"
+    }

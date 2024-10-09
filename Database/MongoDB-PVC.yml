@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+  namesapace: ecommerce
+spec:
+  accessModes:
+    - ReadWriteOnce  # Requesting read-write access
+  resources:
+    requests:
+      storage: 5Gi   # Minimum storage requested
+  storageClassName: my-storage-class   # Reference to the StorageClass

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  namesapace: ecommerce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  strategy:
+    type: RollingUpdate  # Specify the rolling update strategy
+    rollingUpdate:
+      maxSurge: 1         # Maximum number of new pods that can be created above the desired number of pods
+      maxUnavailable: 1    # Maximum number of pods that can be unavailable during the update
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo-my-registry:latest
+        imagePullPolicy: IfNotPresent # here we can use IfNotPresent, Always, Never
+        imagePullSecrets:
+        - name: my_registry_secret # Name of the secret created for the private registry
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongodb-username
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongodb-password
+        # Liveness Probe
+        livenessProbe:
+          httpGet:
+            path: /healthz         # Endpoint to check if the app is alive
+            port: 80
+          initialDelaySeconds: 10   # Wait for 30 seconds before starting to probe
+          failureThreshold: 3   # consider it as failure after 3 attempts
+          timeoutSeconds: 20    # After 20 sec request will timedout
+          periodSeconds: 10          # Check every 10 seconds
+        # Readiness Probe
+        readinessProbe:
+          httpGet:
+            path: /Ready        # Endpoint to check if the app is ready to serve traffic
+            port: 80
+          initialDelaySeconds: 10   # Wait for 30 seconds before starting to probe
+          failureThreshold: 3   # consider it as failure after 3 attempts
+          timeoutSeconds: 20    # After 20 sec request will timedout
+          periodSeconds: 10          # Check every 10 seconds
+        volumeMounts:
+        - name: mongo-storage
+          mountPath: /docker-entrypoint-initdb.d # MongoDB will execute scripts in this directory on startup.
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: mongo-pvc 
+        configMap:
+          name: mongodb-config # Reference to the ConfigMap created earlier.
