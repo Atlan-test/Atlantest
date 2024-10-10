@@ -52,10 +52,10 @@ spec:
           timeoutSeconds: 20    # After 20 sec request will timedout
           periodSeconds: 10          # Check every 10 seconds
         volumeMounts:
-        - name: mongo-storage
+        - name: Identity-pv
           mountPath: /usr/src/app/data # Path where data will be stored
       volumes:
-      - name: mongo-storage
+      - name: Identity-pv
         persistentVolumeClaim:
           claimName: identity-data-pvc # Reference to the PVC created for storage
 

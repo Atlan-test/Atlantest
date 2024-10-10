@@ -52,11 +52,11 @@ spec:
           timeoutSeconds: 20    # After 20 sec request will timedout
           periodSeconds: 10          # Check every 10 seconds
         volumeMounts :
-        - name : mongo-storage
+        - name : Payments-pv
           mountPath : /usr/src/app/data 
 
       volumes :
-      - name : mongo-storage
+      - name : Payments-pv
         persistentVolumeClaim :
           claimName : Payments-data-pvc 
 

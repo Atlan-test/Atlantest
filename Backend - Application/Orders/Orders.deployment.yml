@@ -7,7 +7,7 @@ spec:
   replicas: 3 
   selector:
     matchLabels:
-      app: order-service
+      app: orders-service
   strategy:
     type: RollingUpdate  # Specify the rolling update strategy
     rollingUpdate:
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       labels:
-        app: order-service 
+        app: orders-service 
     spec:
       containers:
-      - name: order-service 
+      - name: orders-service 
         image: your-docker-registry/order-service:lastest 
         imagePullPolicy: IfNotPresent # here we can use IfNotPresent, Always, Never
         imagePullSecrets:
@@ -53,11 +53,11 @@ spec:
           periodSeconds: 10          # Check every 10 seconds
 
         volumeMounts :
-        - name : mongo-storage
+        - name : Orders-pv
           mountPath : /usr/src/app/data 
 
       volumes :
-      - name : mongo-storage 
+      - name : Orders-pv 
         persistentVolumeClaim :
           claimName : order-data-pvc 
 
