@@ -35,14 +35,16 @@ eksctl create iamserviceaccount \
   --role-name AmazonEKSLoadBalancerControllerRole \
   --attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve
+
+  
 **Deploy ALB controller**
-Add helm repo
+**Add helm repo**
 
 helm repo add eks https://aws.github.io/eks-charts
-Update the repo
+**Update the repo**
 
 helm repo update eks
-Install
+**Install**
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \            
   -n kube-system \
