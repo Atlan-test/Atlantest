@@ -16,14 +16,16 @@ spec:
         - name: node-exporter
           image: prom/node-exporter:latest
           ports:
-            - containerPort: 9100
+            - containerPort: 9090
               name: metrics
           volumeMounts:
-            - mountPath: /proc
-              name: proc
-              readOnly: true
-      volumes:
-        - name: proc
-          hostPath:
-            path: /proc
+            - name: prometheus-config 
+              mountPath: /etc/prometheus/
+          args :
+            - "--config.file=/etc/prometheus/prometheus.yml" 
+
+      volumes :
+        - name : prometheus-config 
+          configMap :
+            name : prometheus-config 
         

@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: Deployment 
 metadata:
   name: react-frontend-deployment
-  namesapace: ecommerce # this can be different, depends on which environment we use
-  annotations: # arbitrary non-identifying metadata
+  namesapace: Frontend
+  annotations: 
     version: "1.0.0"
     kubernetes.io/change-cause: "Updated deployment to version 1.0.0"
-  labels:  # used for attaching key:value pair, used to identify/select the pods
+  labels:  
     app: frontend-nginx
 spec:
-  replicas: 3  # Number of desired pods
+  replicas: 3  
   selector:  
     matchLabels:
-      app: frontend-nginx  # Selects Pods with the label app=frontend-nginx
+      app: frontend-nginx  
   strategy:
-    type: RollingUpdate  # Specify the rolling update strategy
+    type: RollingUpdate  
     rollingUpdate:
-      maxSurge: 1         # Maximum number of new pods that can be created above the desired number of pods
-      maxUnavailable: 1    # Maximum number of pods that can be unavailable during the update
+      maxSurge: 25%       # Maximum number of new pods that can be created above the desired number of pods
+      maxUnavailable: 25%    # Maximum number of pods that can be unavailable during the update
   template:     
     metadata:
       labels:
@@ -25,34 +25,34 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: my_private_image.nginx:latest  # Use the latest NGINX image from private registry
+        image: my_private_image.nginx:latest  
         imagePullPolicy: IfNotPresent # here we can use IfNotPresent, Always, Never
         imagePullSecrets:
-        - name: my_registry_secret # Name of the secret created for the private registry
+        - name: my_registry_secret 
         ports:
-        - containerPort: 80  # Expose port 80 on the container
+        - containerPort: 80  
         resources:
             requests:
-              memory: "256Mi"  # Minimum memory request
-              cpu: "500m"      # Minimum CPU request
+              memory: "256Mi"  
+              cpu: "500m"      
             limits:
-              memory: "512Mi"  # Maximum memory limit
-              cpu: "1"         # Maximum CPU limit
+              memory: "512Mi"  
+              cpu: "100m"   
         # Liveness Probe
         livenessProbe:
           httpGet:
             path: /healthz         # Endpoint to check if the app is alive
             port: 80
-          initialDelaySeconds: 10   # Wait for 30 seconds before starting to probe
-          failureThreshold: 3   # consider it as failure after 3 attempts
-          timeoutSeconds: 20    # After 20 sec request will timedout
-          periodSeconds: 10          # Check every 10 seconds
+          initialDelaySeconds: 10   
+          failureThreshold: 3   
+          timeoutSeconds: 20    
+          periodSeconds: 10          
         # Readiness Probe
         readinessProbe:
           httpGet:
             path: /Ready        # Endpoint to check if the app is ready to serve traffic
             port: 80
-          initialDelaySeconds: 10   # Wait for 30 seconds before starting to probe
-          failureThreshold: 3   # consider it as failure after 3 attempts
-          timeoutSeconds: 20    # After 20 sec request will timedout
-          periodSeconds: 10          # Check every 10 seconds
+          initialDelaySeconds: 10   
+          failureThreshold: 3   
+          timeoutSeconds: 20    
+          periodSeconds: 10          

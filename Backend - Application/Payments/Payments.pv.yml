@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: payments-pv
+spec:
+  capacity:
+    storage: 5Gi  
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain  
+  storageClassName: gp2  
+  awsElasticBlockStore:
+    volumeID: aws://us-west-2a/vol-12345678  
+    fsType: ext4  

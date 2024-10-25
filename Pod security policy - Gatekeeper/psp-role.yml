@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: ecommerce  # Specify your namespace
+  name: products-role   # Name of the role for products service
+rules:
+- apiGroups: [""]  # "" indicates the core API group (e.g., pods)
+  resources: ["pods"]
+  verbs: ["get", "list", "watch"]  # Least privilege actions allowed for this role

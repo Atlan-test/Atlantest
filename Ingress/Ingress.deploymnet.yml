@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-ingress-controller
+  namespace: Frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-ingress
+  template:
+    metadata:
+      labels:
+        app: nginx-ingress
+    spec:
+      containers:
+        - name: nginx-ingress-controller
+          image: nginx/nginx-ingress:latest
+          imagePullPolicy: IfNotPresent # here we can use IfNotPresent, Always, Never
+          imagePullSecrets:
+          - name: my_registry_secret 
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          args:
+            - /nginx-ingress-controller
+            - --configmap=$(POD_NAMESPACE)/nginx-configuration
+            - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ingress-service
+  namespace: ingress-nginx
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+    - port: 443
+      targetPort: 443
+  selector:
+    app: nginx-ingress

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: Monitoring
+  labels:
+    environment: production
+    application: ecommerce-app
+  annotations:
+    description: "Namespace for the eCommerce application"
+    version: "1.0.0"

@@ -1,0 +1,31 @@
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: restrictserviceaccountpermissions
+spec:
+  crd:
+    spec:
+      names:
+        kind: RestrictServiceAccountPermissions
+      validation:
+        openAPIV3Schema:
+          type: object
+          properties:
+            allowedActions:
+              type: array
+              items:
+                type: string
+            allowedResources:
+              type: array
+              items:
+                type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package restrictserviceaccountpermissions
+
+        violation[{"msg": msg}] {
+          input.review.object.kind == "Role"  # Check if the resource is a Role
+          not input.review.object.rules[_].verbs[_] in data.allowedActions  # Check if actions are allowed
+          msg := sprintf("Action %v is not allowed", [input.review.object.rules[_].verbs[_]])
+        }

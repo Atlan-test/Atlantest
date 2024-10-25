@@ -1,0 +1,13 @@
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: RestrictServiceAccountPermissions
+metadata:
+  name: restrict-access-to-specific-resources
+spec:
+  allowedActions:
+    - get
+    - list
+    - watch
+  allowedResources:
+    - pods
+    - deployments

@@ -7,8 +7,8 @@ metadata:
     app: node-exporter
 spec:
   ports:
-    - port: 9100
-      targetPort: 9100
+    - port: 9090
+      targetPort: 9090
       protocol: TCP
   selector:
     app: node-exporter

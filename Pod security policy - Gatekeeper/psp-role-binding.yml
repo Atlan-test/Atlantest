@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: products-role-binding
+  namespace: Backend  # Specify your namespace
+subjects:
+- kind: ServiceAccount   # Binding to a ServiceAccount (e.g., products-service)
+  name: products-service  
+  namespace: ecommerce   # Specify the namespace of the ServiceAccount
+roleRef:
+  kind: Role
+  name: products-role    # Reference to the role created above
+  apiGroup: rbac.authorization.k8s.io
